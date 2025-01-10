@@ -1,0 +1,97 @@
+<div class="dynamic-field" [ngSwitch]="field().type">
+  <!-- Text Input -->
+  <mat-form-field *ngSwitchCase="'text'" class="dynamic-field__form-field" appearance="outline">
+    <mat-label class="dynamic-field__label">{{ field().label }}</mat-label>
+    <input
+      matInput
+      [formControl]="control()"
+      [placeholder]="field().placeholder || ''"
+      (input)="onValueChange(control().value)"
+      class="dynamic-field__input"
+    />
+    <mat-error class="dynamic-field__error" *ngIf="control().invalid && control().touched">
+      {{ control().errors | json }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Number Input -->
+  <mat-form-field *ngSwitchCase="'number'" class="dynamic-field__form-field" appearance="outline">
+    <mat-label class="dynamic-field__label">{{ field().label }}</mat-label>
+    <input
+      matInput
+      type="number"
+      [formControl]="control()"
+      [placeholder]="field().placeholder || ''"
+      (input)="onValueChange(control().value)"
+      class="dynamic-field__input"
+    />
+    <mat-error class="dynamic-field__error" *ngIf="control().invalid && control().touched">
+      {{ control().errors | json }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Textarea -->
+  <mat-form-field *ngSwitchCase="'textarea'" class="dynamic-field__form-field" appearance="outline">
+    <mat-label class="dynamic-field__label">{{ field().label }}</mat-label>
+    <textarea
+      matInput
+      [formControl]="control()"
+      [placeholder]="field().placeholder || ''"
+      (input)="onValueChange(control().value)"
+      rows="4"
+      class="dynamic-field__textarea"
+    ></textarea>
+    <mat-error class="dynamic-field__error" *ngIf="control().invalid && control().touched">
+      {{ control().errors | json }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Select Dropdown -->
+  <mat-form-field *ngSwitchCase="'select'" class="dynamic-field__form-field" appearance="outline">
+    <mat-label class="dynamic-field__label">{{ field().label }}</mat-label>
+    <mat-select
+      [formControl]="control()"
+      (selectionChange)="onValueChange(control().value)"
+      class="dynamic-field__select"
+    >
+      <mat-option
+        *ngFor="let option of field().options"
+        [value]="option.value"
+        class="dynamic-field__option"
+      >
+        {{ option.label }}
+      </mat-option>
+    </mat-select>
+    <mat-error class="dynamic-field__error" *ngIf="control().invalid && control().touched">
+      {{ control().errors | json }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Checkbox -->
+  <div *ngSwitchCase="'checkbox'" class="dynamic-field__checkbox-wrapper">
+    <mat-checkbox
+      [formControl]="control()"
+      (change)="onValueChange(control().value)"
+      class="dynamic-field__checkbox"
+    >
+      {{ field().label }}
+    </mat-checkbox>
+  </div>
+
+  <!-- Date Picker -->
+  <mat-form-field *ngSwitchCase="'date'" class="dynamic-field__form-field" appearance="outline">
+    <mat-label class="dynamic-field__label">{{ field().label }}</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker"
+      [formControl]="control()"
+      (dateChange)="onValueChange(control().value)"
+      class="dynamic-field__input"
+    />
+    <mat-datepicker-toggle matIconSuffix [for]="picker" class="dynamic-field__datepicker-toggle"></mat-datepicker-toggle>
+    <mat-datepicker #picker class="dynamic-field__datepicker"></mat-datepicker>
+    <mat-error class="dynamic-field__error" *ngIf="control().invalid && control().touched">
+      {{ control().errors | json }}
+    </mat-error>
+  </mat-form-field>
+</div>
