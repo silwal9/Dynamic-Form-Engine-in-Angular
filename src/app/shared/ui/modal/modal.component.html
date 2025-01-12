@@ -1,0 +1,13 @@
+<div class="modal" *ngIf="isOpen()" (click)="onClose()">
+  <div class="modal__content" (click)="$event.stopPropagation()">
+    <div class="modal__header">
+      <h2 class="modal__title">{{ title() }}</h2>
+      <button mat-icon-button (click)="onClose()" class="modal__close-button">
+        ×
+      </button>
+    </div>
+    <div class="modal__body">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

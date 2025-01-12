@@ -1,0 +1,72 @@
+<div class="dynamic-form">
+  <div class="dynamic-form__header">
+    <h1 class="dynamic-form__title">Dynamic Schema-Driven Form Engine</h1>
+    <p class="dynamic-form__subtitle">Enterprise Angular with NgRx & Signals</p>
+  </div>
+
+  <div class="dynamic-form__controls">
+    <button mat-raised-button color="primary" (click)="loadSchema('example-basic')" class="dynamic-form__button">
+      Load Basic Schema
+    </button>
+    <button mat-raised-button color="primary" (click)="loadSchema('example-advanced')" class="dynamic-form__button">
+      Load Advanced Schema
+    </button>
+    <button mat-raised-button (click)="toggleJsonPreview()" class="dynamic-form__button">
+      {{ showJsonPreview() ? 'Hide' : 'Show' }} JSON Preview
+    </button>
+  </div>
+
+  <div class="dynamic-form__content" *ngIf="schema$ | async as schema">
+    <mat-card class="dynamic-form__card">
+      <mat-card-header class="dynamic-form__card-header">
+        <mat-card-title class="dynamic-form__card-title">{{ schema.title }}</mat-card-title>
+        <mat-card-subtitle class="dynamic-form__card-subtitle" *ngIf="schema.description">
+          {{ schema.description }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="dynamic-form__card-content">
+        <div class="dynamic-form__metadata" *ngIf="metadata$ | async as metadata">
+          <span class="dynamic-form__metadata-item">Total Fields: {{ metadata.totalFields }}</span>
+          <span class="dynamic-form__metadata-item">Required: {{ metadata.requiredFields }}</span>
+          <span class="dynamic-form__metadata-item">Optional: {{ metadata.optionalFields }}</span>
+        </div>
+
+        <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="dynamic-form__form">
+          <div class="dynamic-form__fields">
+            <app-dynamic-field
+              *ngFor="let field of visibleFields$ | async"
+              [field]="field"
+              [control]="formGroup.get(field.id)"
+              (valueChange)="onFieldValueChange($event)"
+              class="dynamic-form__field"
+            ></app-dynamic-field>
+          </div>
+
+          <div class="dynamic-form__actions">
+            <button mat-raised-button color="primary" type="submit" class="dynamic-form__action-button">
+              Submit
+            </button>
+            <button mat-raised-button type="button" (click)="onReset()" class="dynamic-form__action-button">
+              Reset
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="dynamic-form__preview-card" *ngIf="showJsonPreview()">
+      <mat-card-header class="dynamic-form__card-header">
+        <mat-card-title class="dynamic-form__card-title">Live Form Values</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="dynamic-form__card-content">
+        <pre class="dynamic-form__json">{{ formValuesJson$ | async }}</pre>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="dynamic-form__loading" *ngIf="loading$ | async">
+    <mat-spinner class="dynamic-form__spinner"></mat-spinner>
+    <p class="dynamic-form__loading-text">Loading schema...</p>
+  </div>
+</div>

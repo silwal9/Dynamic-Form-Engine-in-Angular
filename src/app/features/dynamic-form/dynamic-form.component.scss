@@ -1,0 +1,132 @@
+.dynamic-form {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+
+  &__header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  &__title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #1976d2;
+    margin: 0 0 8px 0;
+  }
+
+  &__subtitle {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.6);
+    margin: 0;
+  }
+
+  &__controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  &__button {
+    min-width: 120px;
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  &__card,
+  &__preview-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &__card-header {
+    margin-bottom: 16px;
+  }
+
+  &__card-title {
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  &__card-subtitle {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  &__card-content {
+    padding: 16px;
+  }
+
+  &__metadata {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 12px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+  }
+
+  &__metadata-item {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  &__form {
+    width: 100%;
+  }
+
+  &__fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  &__field {
+    display: block;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+
+  &__action-button {
+    min-width: 100px;
+  }
+
+  &__json {
+    background-color: #263238;
+    color: #aed581;
+    padding: 16px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+  }
+
+  &__spinner {
+    margin-bottom: 16px;
+  }
+
+  &__loading-text {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
