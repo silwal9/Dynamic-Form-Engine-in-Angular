@@ -1,0 +1,145 @@
+{
+  "id": "advanced-registration-form",
+  "title": "Advanced Registration Form",
+  "description": "Registration form with conditional fields and complex validation",
+  "fields": [
+    {
+      "id": "username",
+      "type": "text",
+      "label": "Username",
+      "placeholder": "Choose a username",
+      "validation": {
+        "required": true,
+        "minLength": 3,
+        "maxLength": 20,
+        "pattern": "^[a-zA-Z0-9_]+$"
+      }
+    },
+    {
+      "id": "email",
+      "type": "text",
+      "label": "Email",
+      "placeholder": "your.email@example.com",
+      "validation": {
+        "required": true,
+        "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+      }
+    },
+    {
+      "id": "age",
+      "type": "number",
+      "label": "Age",
+      "placeholder": "Enter your age",
+      "validation": {
+        "required": true,
+        "min": 18,
+        "max": 120
+      }
+    },
+    {
+      "id": "country",
+      "type": "select",
+      "label": "Country",
+      "validation": {
+        "required": true
+      },
+      "options": [
+        { "value": "us", "label": "United States" },
+        { "value": "ca", "label": "Canada" },
+        { "value": "uk", "label": "United Kingdom" },
+        { "value": "au", "label": "Australia" },
+        { "value": "other", "label": "Other" }
+      ]
+    },
+    {
+      "id": "otherCountry",
+      "type": "text",
+      "label": "Specify Country",
+      "placeholder": "Please specify your country",
+      "showIf": {
+        "field": "country",
+        "equals": "other"
+      },
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "id": "occupation",
+      "type": "select",
+      "label": "Occupation",
+      "validation": {
+        "required": true
+      },
+      "options": [
+        { "value": "developer", "label": "Software Developer" },
+        { "value": "designer", "label": "Designer" },
+        { "value": "manager", "label": "Manager" },
+        { "value": "student", "label": "Student" },
+        { "value": "other", "label": "Other" }
+      ]
+    },
+    {
+      "id": "company",
+      "type": "text",
+      "label": "Company Name",
+      "placeholder": "Your company",
+      "showIf": {
+        "field": "occupation",
+        "equals": "developer"
+      }
+    },
+    {
+      "id": "university",
+      "type": "text",
+      "label": "University",
+      "placeholder": "Your university",
+      "showIf": {
+        "field": "occupation",
+        "equals": "student"
+      }
+    },
+    {
+      "id": "experience",
+      "type": "number",
+      "label": "Years of Experience",
+      "placeholder": "0",
+      "showIf": {
+        "field": "occupation",
+        "equals": "developer"
+      },
+      "validation": {
+        "min": 0,
+        "max": 50
+      }
+    },
+    {
+      "id": "startDate",
+      "type": "date",
+      "label": "Preferred Start Date",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "id": "bio",
+      "type": "textarea",
+      "label": "Biography",
+      "placeholder": "Tell us about yourself...",
+      "validation": {
+        "maxLength": 1000
+      }
+    },
+    {
+      "id": "terms",
+      "type": "checkbox",
+      "label": "I agree to the terms and conditions",
+      "validation": {
+        "required": true
+      }
+    }
+  ],
+  "layout": {
+    "columns": 2
+  }
+}

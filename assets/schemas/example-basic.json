@@ -1,0 +1,68 @@
+{
+  "id": "basic-contact-form",
+  "title": "Basic Contact Form",
+  "description": "A simple contact form with basic validation",
+  "fields": [
+    {
+      "id": "firstName",
+      "type": "text",
+      "label": "First Name",
+      "placeholder": "Enter your first name",
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 50
+      }
+    },
+    {
+      "id": "lastName",
+      "type": "text",
+      "label": "Last Name",
+      "placeholder": "Enter your last name",
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 50
+      }
+    },
+    {
+      "id": "email",
+      "type": "text",
+      "label": "Email Address",
+      "placeholder": "example@domain.com",
+      "validation": {
+        "required": true,
+        "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+      }
+    },
+    {
+      "id": "phone",
+      "type": "text",
+      "label": "Phone Number",
+      "placeholder": "(123) 456-7890",
+      "validation": {
+        "pattern": "^\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$"
+      }
+    },
+    {
+      "id": "message",
+      "type": "textarea",
+      "label": "Message",
+      "placeholder": "Enter your message here...",
+      "validation": {
+        "required": true,
+        "minLength": 10,
+        "maxLength": 500
+      }
+    },
+    {
+      "id": "newsletter",
+      "type": "checkbox",
+      "label": "Subscribe to newsletter",
+      "defaultValue": false
+    }
+  ],
+  "layout": {
+    "columns": 2
+  }
+}
