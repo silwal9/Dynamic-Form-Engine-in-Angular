@@ -9,6 +9,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { FormField } from '../../models/form-field.model';
 import { DynamicFieldUtils } from './dynamic-field.utils';
+import { ValidationUtil } from '../../utils/validation.util';
 
 @Component({
   selector: 'app-dynamic-field',
@@ -37,5 +38,9 @@ export class DynamicFieldComponent {
 
   onValueChange(value: unknown): void {
     this.valueChange.emit({ fieldId: this.field().id, value });
+  }
+
+  getErrorMessage(): string {
+    return ValidationUtil.getErrorMessage(this.control(), this.field().label);
   }
 }
