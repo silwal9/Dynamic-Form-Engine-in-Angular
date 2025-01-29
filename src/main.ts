@@ -1,3 +1,4 @@
+import 'zone.js';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
@@ -14,6 +15,6 @@ bootstrapApplication(AppComponent, {
     provideStore({
       dynamicForm: dynamicFormReducer,
     }),
-    provideEffects([DynamicFormEffects]),
+    provideEffects(DynamicFormEffects),
   ],
 }).catch((err) => console.error(err));
