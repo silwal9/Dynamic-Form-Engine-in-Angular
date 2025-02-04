@@ -41,6 +41,7 @@
       "label": "Phone Number",
       "placeholder": "(123) 456-7890",
       "validation": {
+        "required": true,
         "pattern": "^\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$"
       }
     },

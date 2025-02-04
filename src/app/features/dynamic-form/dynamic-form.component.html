@@ -37,7 +37,7 @@
             <app-dynamic-field
               *ngFor="let field of visibleFields()"
               [field]="field"
-              [control]="$any(formGroup.get(field.id))"
+              [control]="getFormControl(field.id)"
               class="dynamic-form__field"
             ></app-dynamic-field>
           </div>
@@ -68,4 +68,11 @@
     <mat-spinner class="dynamic-form__spinner"></mat-spinner>
     <p class="dynamic-form__loading-text">Loading schema...</p>
   </div>
+
+  <app-modal
+    [message]="snackbarMessage()"
+    [type]="snackbarType()"
+    [isOpen]="showSnackbar()"
+    (close)="closeSnackbar()"
+  ></app-modal>
 </div>

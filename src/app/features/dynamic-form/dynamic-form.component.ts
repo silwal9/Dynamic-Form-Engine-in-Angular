@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, signal, inject, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, signal, inject, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -11,7 +11,7 @@ import { ValidationUtil } from '../../shared/utils/validation.util';
 import { FormField } from '../../shared/models/form-field.model';
 import * as DynamicFormActions from './store/dynamic-form.actions';
 import * as DynamicFormSelectors from './store/dynamic-form.selectors';
-import { Subject, takeUntil, debounceTime, distinctUntilChanged, map } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -37,7 +37,7 @@ export class DynamicFormComponent implements OnInit, OnDestroy {
   loading$ = this.store.select(DynamicFormSelectors.selectLoading);
 
   private allFields = signal<FormField[]>([]);
-  private formValues = signal<Record<string, any>>({});
+  private formValues = signal<Record<string, unknown>>({});
 
   visibleFields = computed(() => {
     const fields = this.allFields();
@@ -62,6 +62,35 @@ export class DynamicFormComponent implements OnInit, OnDestroy {
   showJsonPreview = signal(false);
   formValuesJson = computed(() => JSON.stringify(this.formValues(), null, 2));
 
+  // Snackbar state
+  showSnackbar = signal(false);
+  snackbarMessage = signal('');
+  snackbarType = signal<'success' | 'error'>('success');
+
+  // Effect to update validators based on field visibility
+  private validatorEffect = effect(() => {
+    const visible = this.visibleFields();
+    const fields = this.allFields();
+
+    fields.forEach(field => {
+      const control = this.formGroup.get(field.id);
+      if (control && field.showIf) {
+        const isVisible = visible.some(f => f.id === field.id);
+        if (isVisible) {
+          // Field is visible - apply validators
+          const validators = ValidationUtil.buildValidators(field.validation);
+          control.setValidators(validators);
+          control.updateValueAndValidity({ emitEvent: false });
+        } else {
+          // Field is hidden - clear validators and value
+          control.clearValidators();
+          control.setValue(null, { emitEvent: false });
+          control.updateValueAndValidity({ emitEvent: false });
+        }
+      }
+    });
+  });
+
   ngOnInit(): void {
     // Load initial schema
     this.store.dispatch(
@@ -85,11 +114,28 @@ export class DynamicFormComponent implements OnInit, OnDestroy {
   }
 
   private buildFormControls(fields: FormField[]): void {
-    const group: any = {};
+    const group: Record<string, FormControl> = {};
 
     fields.forEach(field => {
       const validators = ValidationUtil.buildValidators(field.validation);
-      const defaultValue = field.defaultValue ?? '';
+      let defaultValue: string | number | boolean | null = field.defaultValue ?? null;
+
+      if (field.defaultValue === undefined) {
+        switch (field.type) {
+          case 'checkbox':
+            defaultValue = false;
+            break;
+          case 'select':
+            defaultValue = null;
+            break;
+          case 'number':
+            defaultValue = null;
+            break;
+          default:
+            defaultValue = '';
+        }
+      }
+
       group[field.id] = new FormControl(defaultValue, validators);
     });
 
@@ -106,19 +152,22 @@ export class DynamicFormComponent implements OnInit, OnDestroy {
     this.formValues.set(this.formGroup.value);
   }
 
-  onFieldValueChange(event: { fieldId: string; value: unknown }): void {
-    // This is no longer needed as we listen to formGroup.valueChanges
-    // But keeping it for backward compatibility with the template
-  }
-
   onSubmit(): void {
     if (this.formGroup.valid) {
       console.log('Form submitted:', this.formGroup.value);
-      alert('Form submitted successfully! Check console for values.');
+      this.snackbarType.set('success');
+      this.snackbarMessage.set('Form submitted successfully! Check the console for submitted values.');
+      this.showSnackbar.set(true);
     } else {
       this.formGroup.markAllAsTouched();
-      alert('Please fix validation errors before submitting.');
+      this.snackbarType.set('error');
+      this.snackbarMessage.set('Please fix the validation errors in the form before submitting.');
+      this.showSnackbar.set(true);
     }
+  }
+
+  closeSnackbar(): void {
+    this.showSnackbar.set(false);
   }
 
   onReset(): void {
@@ -134,5 +183,9 @@ export class DynamicFormComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       DynamicFormActions.loadSchema({ schemaPath: `assets/schemas/${schemaName}.json` })
     );
+  }
+
+  getFormControl(fieldId: string): FormControl {
+    return this.formGroup.get(fieldId) as FormControl;
   }
 }
